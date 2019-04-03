@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <world_plugins_ros/UnderwaterCurrentROSPlugin.hh>
+#include <worlds_plugins_ros/UnderwaterCurrentROSPlugin.hh>
 
 namespace uuv_simulator_ros
 {
