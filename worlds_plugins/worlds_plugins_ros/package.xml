@@ -14,9 +14,9 @@
 
   <depend>gazebo_msgs</depend>
   <depend>roscpp</depend>
-  <depend>world_plugins</depend>
+  <depend>worlds_plugins</depend>
   <depend>geometry_msgs</depend>
-  <depend>world_plugins_ros_msgs</depend>
+  <depend>worlds_plugins_ros_msgs</depend>
   <depend>gazebo_dev</depend>
 
   <export>

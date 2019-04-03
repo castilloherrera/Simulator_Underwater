@@ -8,8 +8,8 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   gazebo_msgs
   geometry_msgs
-  #world_plugins
-  #world_plugins_ros_msgs
+  worlds_plugins
+  worlds_plugins_ros_msgs
   gazebo_dev)
 
 catkin_package(
@@ -21,8 +21,8 @@ catkin_package(
    roscpp
    gazebo_msgs
    geometry_msgs
-   #world_plugins
-   #world_plugins_ros_msgs
+   worlds_plugins
+   worlds_plugins_ros_msgs
    gazebo_dev
 )
 
