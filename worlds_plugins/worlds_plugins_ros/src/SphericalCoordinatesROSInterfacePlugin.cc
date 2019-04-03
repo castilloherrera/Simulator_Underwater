@@ -15,7 +15,7 @@
 
 /// \file SphericalCoordinatesROSInterfacePlugin.cc
 
-#include <world_plugins_ros/SphericalCoordinatesROSInterfacePlugin.hh>
+#include <worlds_plugins_ros/SphericalCoordinatesROSInterfacePlugin.hh>
 
 namespace gazebo
 {
@@ -102,8 +102,8 @@ void SphericalCoordinatesROSInterfacePlugin::Load(
 
 /////////////////////////////////////////////////
 bool SphericalCoordinatesROSInterfacePlugin::TransformToSphericalCoord(
-    world_plugins_ros_msgs::TransformToSphericalCoord::Request& _req,
-    world_plugins_ros_msgs::TransformToSphericalCoord::Response& _res)
+    worlds_plugins_ros_msgs::TransformToSphericalCoord::Request& _req,
+    worlds_plugins_ros_msgs::TransformToSphericalCoord::Response& _res)
 {
   ignition::math::Vector3d cartVec = ignition::math::Vector3d(
     _req.input.x, _req.input.y, _req.input.z);
@@ -123,8 +123,8 @@ bool SphericalCoordinatesROSInterfacePlugin::TransformToSphericalCoord(
 
 /////////////////////////////////////////////////
 bool SphericalCoordinatesROSInterfacePlugin::TransformFromSphericalCoord(
-    world_plugins_ros_msgs::TransformFromSphericalCoord::Request& _req,
-    world_plugins_ros_msgs::TransformFromSphericalCoord::Response& _res)
+    worlds_plugins_ros_msgs::TransformFromSphericalCoord::Request& _req,
+    worlds_plugins_ros_msgs::TransformFromSphericalCoord::Response& _res)
 {
   ignition::math::Vector3d scVec = ignition::math::Vector3d(
     _req.latitude_deg, _req.longitude_deg, _req.altitude);
@@ -143,8 +143,8 @@ bool SphericalCoordinatesROSInterfacePlugin::TransformFromSphericalCoord(
 
 /////////////////////////////////////////////////
 bool SphericalCoordinatesROSInterfacePlugin::GetOriginSphericalCoord(
-    world_plugins_ros_msgs::GetOriginSphericalCoord::Request& _req,
-    world_plugins_ros_msgs::GetOriginSphericalCoord::Response& _res)
+    worlds_plugins_ros_msgs::GetOriginSphericalCoord::Request& _req,
+    worlds_plugins_ros_msgs::GetOriginSphericalCoord::Response& _res)
 {
 #if GAZEBO_MAJOR_VERSION >= 8
   _res.latitude_deg =
@@ -166,8 +166,8 @@ bool SphericalCoordinatesROSInterfacePlugin::GetOriginSphericalCoord(
 
 /////////////////////////////////////////////////
 bool SphericalCoordinatesROSInterfacePlugin::SetOriginSphericalCoord(
-    world_plugins_ros_msgs::SetOriginSphericalCoord::Request& _req,
-    world_plugins_ros_msgs::SetOriginSphericalCoord::Response& _res)
+    worlds_plugins_ros_msgs::SetOriginSphericalCoord::Request& _req,
+    worlds_plugins_ros_msgs::SetOriginSphericalCoord::Response& _res)
 {
   ignition::math::Angle angle;
   angle.Degree(_req.latitude_deg);
