@@ -24,10 +24,10 @@
 #include <gazebo/common/SphericalCoordinates.hh>
 #include <gazebo/physics/World.hh>
 #include <ros/ros.h>
-#include <world_plugins_ros_msgs/SetOriginSphericalCoord.h>
-#include <world_plugins_ros_msgs/GetOriginSphericalCoord.h>
-#include <world_plugins_ros_msgs/TransformToSphericalCoord.h>
-#include <world_plugins_ros_msgs/TransformFromSphericalCoord.h>
+#include <worlds_plugins_ros_msgs/SetOriginSphericalCoord.h>
+#include <worlds_plugins_ros_msgs/GetOriginSphericalCoord.h>
+#include <worlds_plugins_ros_msgs/TransformToSphericalCoord.h>
+#include <worlds_plugins_ros_msgs/TransformFromSphericalCoord.h>
 #include <geometry_msgs/Vector3.h>
 
 #include <map>

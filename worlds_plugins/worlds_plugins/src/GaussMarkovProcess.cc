@@ -15,7 +15,7 @@
 
 /// \file GaussMarkovProcess.cc
 
-#include <world_plugins/GaussMarkovProcess.hh>
+#include <worlds_plugins/GaussMarkovProcess.hh>
 
 namespace gazebo
 {

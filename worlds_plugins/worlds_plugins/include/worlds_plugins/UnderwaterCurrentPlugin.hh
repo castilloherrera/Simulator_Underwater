@@ -25,7 +25,7 @@
 
 #include <gazebo/gazebo.hh>
 #include <gazebo/transport/TransportTypes.hh>
-#include <world_plugins/GaussMarkovProcess.hh>
+#include <worlds_plugins/GaussMarkovProcess.hh>
 #include <sdf/sdf.hh>
 
 namespace gazebo

@@ -24,19 +24,19 @@
 #include <string>
 
 // Gazebo plugin
-#include <world_plugins/UnderwaterCurrentPlugin.hh>
+#include <worlds_plugins/UnderwaterCurrentPlugin.hh>
 
 #include <boost/scoped_ptr.hpp>
 #include <gazebo/common/Plugin.hh>
 #include <gazebo/physics/World.hh>
 #include <ros/ros.h>
 #include <geometry_msgs/TwistStamped.h>
-#include <world_plugins_ros_msgs/SetCurrentModel.h>
-#include <world_plugins_ros_msgs/GetCurrentModel.h>
-#include <world_plugins_ros_msgs/SetCurrentVelocity.h>
-#include <world_plugins_ros_msgs/SetCurrentDirection.h>
-#include <world_plugins_ros_msgs/SetOriginSphericalCoord.h>
-#include <world_plugins_ros_msgs/GetOriginSphericalCoord.h>
+#include <worlds_plugins_ros_msgs/SetCurrentModel.h>
+#include <worlds_plugins_ros_msgs/GetCurrentModel.h>
+#include <worlds_plugins_ros_msgs/SetCurrentVelocity.h>
+#include <worlds_plugins_ros_msgs/SetCurrentDirection.h>
+#include <worlds_plugins_ros_msgs/SetOriginSphericalCoord.h>
+#include <worlds_plugins_ros_msgs/GetOriginSphericalCoord.h>
 
 namespace uuv_simulator_ros
 {
