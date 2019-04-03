@@ -149,8 +149,8 @@ void UnderwaterCurrentROSPlugin::OnUpdateCurrentVel()
 
 /////////////////////////////////////////////////
 bool UnderwaterCurrentROSPlugin::UpdateHorzAngle(
-    world_plugins_ros_msgs::SetCurrentDirection::Request& _req,
-    world_plugins_ros_msgs::SetCurrentDirection::Response& _res)
+    worlds_plugins_ros_msgs::SetCurrentDirection::Request& _req,
+    worlds_plugins_ros_msgs::SetCurrentDirection::Response& _res)
 {
   _res.success = this->currentHorzAngleModel.SetMean(_req.angle);
 
@@ -159,8 +159,8 @@ bool UnderwaterCurrentROSPlugin::UpdateHorzAngle(
 
 /////////////////////////////////////////////////
 bool UnderwaterCurrentROSPlugin::UpdateVertAngle(
-    world_plugins_ros_msgs::SetCurrentDirection::Request& _req,
-    world_plugins_ros_msgs::SetCurrentDirection::Response& _res)
+    worlds_plugins_ros_msgs::SetCurrentDirection::Request& _req,
+    worlds_plugins_ros_msgs::SetCurrentDirection::Response& _res)
 {
   _res.success = this->currentVertAngleModel.SetMean(_req.angle);
   return true;
@@ -168,8 +168,8 @@ bool UnderwaterCurrentROSPlugin::UpdateVertAngle(
 
 /////////////////////////////////////////////////
 bool UnderwaterCurrentROSPlugin::UpdateCurrentVelocity(
-    world_plugins_ros_msgs::SetCurrentVelocity::Request& _req,
-    world_plugins_ros_msgs::SetCurrentVelocity::Response& _res)
+    worlds_plugins_ros_msgs::SetCurrentVelocity::Request& _req,
+    worlds_plugins_ros_msgs::SetCurrentVelocity::Response& _res)
 {
   if (this->currentVelModel.SetMean(_req.velocity) &&
       this->currentHorzAngleModel.SetMean(_req.horizontal_angle) &&
@@ -194,8 +194,8 @@ bool UnderwaterCurrentROSPlugin::UpdateCurrentVelocity(
 
 /////////////////////////////////////////////////
 bool UnderwaterCurrentROSPlugin::GetCurrentVelocityModel(
-    world_plugins_ros_msgs::GetCurrentModel::Request& _req,
-    world_plugins_ros_msgs::GetCurrentModel::Response& _res)
+    worlds_plugins_ros_msgs::GetCurrentModel::Request& _req,
+    worlds_plugins_ros_msgs::GetCurrentModel::Response& _res)
 {
   _res.mean = this->currentVelModel.mean;
   _res.min = this->currentVelModel.min;
@@ -207,8 +207,8 @@ bool UnderwaterCurrentROSPlugin::GetCurrentVelocityModel(
 
 /////////////////////////////////////////////////
 bool UnderwaterCurrentROSPlugin::GetCurrentHorzAngleModel(
-    world_plugins_ros_msgs::GetCurrentModel::Request& _req,
-    world_plugins_ros_msgs::GetCurrentModel::Response& _res)
+    worlds_plugins_ros_msgs::GetCurrentModel::Request& _req,
+    worlds_plugins_ros_msgs::GetCurrentModel::Response& _res)
 {
   _res.mean = this->currentHorzAngleModel.mean;
   _res.min = this->currentHorzAngleModel.min;
@@ -220,8 +220,8 @@ bool UnderwaterCurrentROSPlugin::GetCurrentHorzAngleModel(
 
 /////////////////////////////////////////////////
 bool UnderwaterCurrentROSPlugin::GetCurrentVertAngleModel(
-    world_plugins_ros_msgs::GetCurrentModel::Request& _req,
-    world_plugins_ros_msgs::GetCurrentModel::Response& _res)
+    worlds_plugins_ros_msgs::GetCurrentModel::Request& _req,
+    worlds_plugins_ros_msgs::GetCurrentModel::Response& _res)
 {
   _res.mean = this->currentVertAngleModel.mean;
   _res.min = this->currentVertAngleModel.min;
@@ -234,8 +234,8 @@ bool UnderwaterCurrentROSPlugin::GetCurrentVertAngleModel(
 
 /////////////////////////////////////////////////
 bool UnderwaterCurrentROSPlugin::UpdateCurrentVelocityModel(
-    world_plugins_ros_msgs::SetCurrentModel::Request& _req,
-    world_plugins_ros_msgs::SetCurrentModel::Response& _res)
+    worlds_plugins_ros_msgs::SetCurrentModel::Request& _req,
+    worlds_plugins_ros_msgs::SetCurrentModel::Response& _res)
 {
   _res.success = this->currentVelModel.SetModel(
     std::max(0.0, _req.mean),
@@ -252,8 +252,8 @@ bool UnderwaterCurrentROSPlugin::UpdateCurrentVelocityModel(
 
 /////////////////////////////////////////////////
 bool UnderwaterCurrentROSPlugin::UpdateCurrentHorzAngleModel(
-    world_plugins_ros_msgs::SetCurrentModel::Request& _req,
-    world_plugins_ros_msgs::SetCurrentModel::Response& _res)
+    worlds_plugins_ros_msgs::SetCurrentModel::Request& _req,
+    worlds_plugins_ros_msgs::SetCurrentModel::Response& _res)
 {
   _res.success = this->currentHorzAngleModel.SetModel(_req.mean, _req.min,
     _req.max, _req.mu, _req.noise);
@@ -266,8 +266,8 @@ bool UnderwaterCurrentROSPlugin::UpdateCurrentHorzAngleModel(
 
 /////////////////////////////////////////////////
 bool UnderwaterCurrentROSPlugin::UpdateCurrentVertAngleModel(
-    world_plugins_ros_msgs::SetCurrentModel::Request& _req,
-    world_plugins_ros_msgs::SetCurrentModel::Response& _res)
+    worlds_plugins_ros_msgs::SetCurrentModel::Request& _req,
+    worlds_plugins_ros_msgs::SetCurrentModel::Response& _res)
 {
   _res.success = this->currentVertAngleModel.SetModel(_req.mean, _req.min,
     _req.max, _req.mu, _req.noise);

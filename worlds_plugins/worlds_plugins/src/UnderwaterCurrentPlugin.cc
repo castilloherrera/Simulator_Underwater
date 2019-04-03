@@ -30,7 +30,7 @@
 
 #include <math.h>
 
-#include <world_plugins/UnderwaterCurrentPlugin.hh>
+#include <worlds_plugins/UnderwaterCurrentPlugin.hh>
 
 using namespace gazebo;
 
