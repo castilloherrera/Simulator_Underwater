@@ -55,53 +55,53 @@ namespace uuv_simulator_ros
     /// \brief Service call to update the parameters for the velocity
     /// Gauss-Markov process model
     public: bool UpdateCurrentVelocityModel(
-        world_plugins_ros_msgs::SetCurrentModel::Request& _req,
-        world_plugins_ros_msgs::SetCurrentModel::Response& _res);
+        worlds_plugins_ros_msgs::SetCurrentModel::Request& _req,
+        worlds_plugins_ros_msgs::SetCurrentModel::Response& _res);
 
     /// \brief Service call to update the parameters for the horizontal angle
     /// Gauss-Markov process model
     public: bool UpdateCurrentHorzAngleModel(
-        world_plugins_ros_msgs::SetCurrentModel::Request& _req,
-        world_plugins_ros_msgs::SetCurrentModel::Response& _res);
+        worlds_plugins_ros_msgs::SetCurrentModel::Request& _req,
+        worlds_plugins_ros_msgs::SetCurrentModel::Response& _res);
 
     /// \brief Service call to update the parameters for the vertical angle
     /// Gauss-Markov process model
     public: bool UpdateCurrentVertAngleModel(
-        world_plugins_ros_msgs::SetCurrentModel::Request& _req,
-        world_plugins_ros_msgs::SetCurrentModel::Response& _res);
+        worlds_plugins_ros_msgs::SetCurrentModel::Request& _req,
+        worlds_plugins_ros_msgs::SetCurrentModel::Response& _res);
 
     /// \brief Service call to read the parameters for the velocity
     /// Gauss-Markov process model
     public: bool GetCurrentVelocityModel(
-        world_plugins_ros_msgs::GetCurrentModel::Request& _req,
-        world_plugins_ros_msgs::GetCurrentModel::Response& _res);
+        worlds_plugins_ros_msgs::GetCurrentModel::Request& _req,
+        worlds_plugins_ros_msgs::GetCurrentModel::Response& _res);
 
     /// \brief Service call to read the parameters for the horizontal angle
     /// Gauss-Markov process model
     public: bool GetCurrentHorzAngleModel(
-        world_plugins_ros_msgs::GetCurrentModel::Request& _req,
-        world_plugins_ros_msgs::GetCurrentModel::Response& _res);
+        worlds_plugins_ros_msgs::GetCurrentModel::Request& _req,
+        worlds_plugins_ros_msgs::GetCurrentModel::Response& _res);
 
     /// \brief Service call to read the parameters for the vertical angle
     /// Gauss-Markov process model
     public: bool GetCurrentVertAngleModel(
-        world_plugins_ros_msgs::GetCurrentModel::Request& _req,
-        world_plugins_ros_msgs::GetCurrentModel::Response& _res);
+        worlds_plugins_ros_msgs::GetCurrentModel::Request& _req,
+        worlds_plugins_ros_msgs::GetCurrentModel::Response& _res);
 
     /// \brief Service call to update the mean value of the flow velocity
     public: bool UpdateCurrentVelocity(
-        world_plugins_ros_msgs::SetCurrentVelocity::Request& _req,
-        world_plugins_ros_msgs::SetCurrentVelocity::Response& _res);
+        worlds_plugins_ros_msgs::SetCurrentVelocity::Request& _req,
+        worlds_plugins_ros_msgs::SetCurrentVelocity::Response& _res);
 
     /// \brief Service call to update the mean value of the horizontal angle
     public: bool UpdateHorzAngle(
-        world_plugins_ros_msgs::SetCurrentDirection::Request& _req,
-        world_plugins_ros_msgs::SetCurrentDirection::Response& _res);
+        worlds_plugins_ros_msgs::SetCurrentDirection::Request& _req,
+        worlds_plugins_ros_msgs::SetCurrentDirection::Response& _res);
 
     /// \brief Service call to update the mean value of the vertical angle
     public: bool UpdateVertAngle(
-        world_plugins_ros_msgs::SetCurrentDirection::Request& _req,
-        world_plugins_ros_msgs::SetCurrentDirection::Response& _res);
+        worlds_plugins_ros_msgs::SetCurrentDirection::Request& _req,
+        worlds_plugins_ros_msgs::SetCurrentDirection::Response& _res);
 
     /// \brief Publishes ROS topics
     private: void OnUpdateCurrentVel();
