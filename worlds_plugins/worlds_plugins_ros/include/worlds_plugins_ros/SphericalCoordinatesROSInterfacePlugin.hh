@@ -49,23 +49,23 @@ class SphericalCoordinatesROSInterfacePlugin : public WorldPlugin
 
   /// \brief Service call that returns the origin in WGS84 standard
   public: bool GetOriginSphericalCoord(
-      world_plugins_ros_msgs::GetOriginSphericalCoord::Request& _req,
-      world_plugins_ros_msgs::GetOriginSphericalCoord::Response& _res);
+      worlds_plugins_ros_msgs::GetOriginSphericalCoord::Request& _req,
+      worlds_plugins_ros_msgs::GetOriginSphericalCoord::Response& _res);
 
   /// \brief Service call that returns the origin in WGS84 standard
   public: bool SetOriginSphericalCoord(
-      world_plugins_ros_msgs::SetOriginSphericalCoord::Request& _req,
-      world_plugins_ros_msgs::SetOriginSphericalCoord::Response& _res);
+      worlds_plugins_ros_msgs::SetOriginSphericalCoord::Request& _req,
+      worlds_plugins_ros_msgs::SetOriginSphericalCoord::Response& _res);
 
   /// \brief Service call to transform from Cartesian to spherical coordinates
   public: bool TransformToSphericalCoord(
-      world_plugins_ros_msgs::TransformToSphericalCoord::Request& _req,
-      world_plugins_ros_msgs::TransformToSphericalCoord::Response& _res);
+      worlds_plugins_ros_msgs::TransformToSphericalCoord::Request& _req,
+      worlds_plugins_ros_msgs::TransformToSphericalCoord::Response& _res);
 
   /// \brief Service call to transform from spherical to Cartesian coordinates
   public: bool TransformFromSphericalCoord(
-      world_plugins_ros_msgs::TransformFromSphericalCoord::Request& _req,
-      world_plugins_ros_msgs::TransformFromSphericalCoord::Response& _res);
+      worlds_plugins_ros_msgs::TransformFromSphericalCoord::Request& _req,
+      worlds_plugins_ros_msgs::TransformFromSphericalCoord::Response& _res);
 
   /// \brief Pointer to this ROS node's handle.
   protected: boost::scoped_ptr<ros::NodeHandle> rosNode;
