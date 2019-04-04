@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>simulator</name>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
   <description>The simulator package</description>
 
   <maintainer email="alamcastillo@outlook.com">CASTILLO HERRERA Alam</maintainer>
@@ -12,12 +12,7 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <exec_depend>assistants</exec_depend>
-  <exec_depend>thruster_manager</exec_depend>
-  <exec_depend>gazebo</exec_depend>
-  <exec_depend>gazebo_plugins</exec_depend>
-  <exec_depend>gazebo_ros_plugins</exec_depend>
-  <exec_depend>gazebo_ros_plugins_msgs</exec_depend>
+  <exec_depend>tools</exec_depend>
   <exec_depend>worlds</exec_depend>
   <exec_depend>world_plugins</exec_depend>
   <exec_depend>world_plugins_ros</exec_depend>

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(assistants)
+project(tools)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -34,8 +34,6 @@ catkin_install_python(PROGRAMS scripts/publish_footprints.py
                                scripts/publish_world_models.py
                                scripts/publish_vehicle_footprint.py
                                scripts/unpause_simulation.py
-                               scripts/create_new_robot_model
-                               scripts/create_thruster_manager_configuration
                       DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 install(DIRECTORY launch

@@ -15,7 +15,7 @@
         <arg name="verbose" value="true"/>
     </include>
 
-    <include file="$(find assistants)/launch/publish_world_ned_frame.launch"/>
+    <include file="$(find tools)/launch/publish_world_ned_frame.launch"/>
     
     <node name="publish_world_models"
         pkg="assistants"
@@ -50,7 +50,7 @@
     </node>
 
     <group if="$(arg set_timeout)">
-        <include file="$(find assistants)/launch/set_simulation_timer.launch">
+        <include file="$(find tools)/launch/set_simulation_timer.launch">
             <arg name="timeout" value="$(arg timeout)"/>
         </include>
     </group>

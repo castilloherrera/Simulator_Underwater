@@ -7,7 +7,7 @@
 
     <group ns="$(arg name)">
         <node name="publish_footprints" 
-              pkg="assistants" 
+              pkg="tools" 
               type="publish_vehicle_footprint.py" 
               output="screen">
               <remap from="odom" to="$(arg odom_topic)"/>

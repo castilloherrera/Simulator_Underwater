@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>assistants</name>
-  <version>0.1.0</version>
-  <description>The assistants package</description>
+  <name>tools</name>
+  <version>0.1.1</version>
+  <description>The tools package</description>
 
   <maintainer email="alamcastillo@outlook.com">CASTILLO HERRERA Alam</maintainer>
   
