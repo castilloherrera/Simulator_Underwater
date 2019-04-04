@@ -3,6 +3,8 @@ project(worlds)
 
 find_package(catkin REQUIRED COMPONENTS gazebo_ros)
 
+catkin_package()
+
 install(DIRECTORY launch Media worlds models
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
         PATTERN "*~" EXCLUDE)
