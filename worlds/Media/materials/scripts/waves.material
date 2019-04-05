@@ -20,7 +20,7 @@ material UUVSimulator/SimpleWaves
         param_named_auto eyePos camera_position_object_space
         param_named_auto time time_0_x 100.0
         param_named rescale float 0.5
-        param_named bumpScale float2 50 50
+        param_named bumpScale float2 25 25
         param_named bumpSpeed float2 0.1 0.1
         param_named frequency float 0.5
         param_named amplitude float 0.5
