@@ -16,7 +16,6 @@
   <depend>nav_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>sensor_msgs</depend>
-  <depend>tf</depend>
   <depend>topic_tools</depend>
 
   <exec_depend>rospy</exec_depend>
