@@ -6,6 +6,7 @@ find_package(catkin REQUIRED COMPONENTS
   nav_msgs
   geometry_msgs
   sensor_msgs
+  tf
   topic_tools)
 
 catkin_package(
@@ -14,6 +15,7 @@ catkin_package(
     nav_msgs
     geometry_msgs
     sensor_msgs
+    tf
     topic_tools
 )
 
