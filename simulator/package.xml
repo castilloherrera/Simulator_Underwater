@@ -17,9 +17,6 @@
   <exec_depend>world_plugins</exec_depend>
   <exec_depend>world_plugins_ros</exec_depend>
   <exec_depend>world_plugins_ros_msgs</exec_depend>
-  <exec_depend>gazebo</exec_depend>
-  <exec_depend>control</exec_depend>
-  <exec_depend>configuration</exec_depend>
 
   <export>
     <metapackage/>
