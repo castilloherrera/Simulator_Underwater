@@ -7,15 +7,13 @@ add_definitions(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
   gazebo_dev
-  uuv_gazebo_plugins
   sensor_msgs
   image_transport
   geometry_msgs
   std_msgs
   roscpp
   tf
-  gazebo_plugins
-  uuv_sensor_ros_plugins_msgs
+  tools
   message_filters
   tf2_ros
   tf2
@@ -27,7 +25,7 @@ find_package(OpenCV REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system)
 
-set(UUV_SENSOR_ROS_PLUGINS_LIST "")
+set(SENSOR_ROS_PLUGINS_LIST "")
 
 # Add Gazebo custom protobuf messages
 set(PROTOBUF_IMPORT_DIRS "")
