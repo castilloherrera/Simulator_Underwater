@@ -18,7 +18,16 @@
   <exec_depend>world_plugins_ros</exec_depend>
   <exec_depend>world_plugins_ros_msgs</exec_depend>
   <exec_depend>control</exec_depend>
+  <exec_depend>control_msgs</exec_depend>
+  <exec_depend>trajectory_control</exec_depend>
+  <exec_depend>truster_manager</exec_depend>
   <exec_depend>sensor_plugins</exec_depend>
+  <exec_depend>sensor_plugins_ros</exec_depend>
+  <exec_depend>sensor_plugins_ros_msgs</exec_depend>
+  <exec_depend>ECA_A9_AUV</exec_depend>
+  <exec_depend>configuration</exec_depend>
+  <exec_depend>control</exec_depend>
+  <exec_depend>gazebo</exec_depend>
 
   <export>
     <metapackage/>
