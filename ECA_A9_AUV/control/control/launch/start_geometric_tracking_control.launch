@@ -43,7 +43,7 @@
      visualization markers for RViz -->
   <group if="$(arg gui_on)">
       <group ns="$(arg uuv_name)">
-          <node pkg="uuv_control_utils"
+          <node pkg="control_utils"
               type="trajectory_marker_publisher.py"
               name="trajectory_marker_publisher"
               output="screen"/>
@@ -51,9 +51,9 @@
   </group>
 
   <group ns="$(arg uuv_name)">
-    <node pkg="uuv_trajectory_control"
-          type="auv_geometric_tracking_controller.py"
-          name="auv_geometric_tracking_controller"
+    <node pkg="trajectory_control"
+          type="geometric_tracking_controller.py"
+          name="geometric_tracking_controller"
           output="screen"
           unless="$(arg use_ned_frame)">
       <remap from="odom" to="pose_gt"/>
@@ -101,9 +101,9 @@
       </rosparam>
     </node>
 
-    <node pkg="uuv_trajectory_control"
-          type="auv_geometric_tracking_controller.py"
-          name="auv_geometric_tracking_controller"
+    <node pkg="rajectory_control"
+          type="geometric_tracking_controller.py"
+          name="geometric_tracking_controller"
           output="screen"
           if="$(arg use_ned_frame)">
       <remap from="odom" to="pose_gt_ned"/>
@@ -153,6 +153,6 @@
   </group>
 
   <group if="$(arg gui_on)">
-      <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d $(find eca_a9_control)/rviz/eca_a9_control.rviz"/>
+      <node name="rviz" pkg="rviz" type="rviz" output="screen" args="-d $(find control)/rviz/eca_a9_control.rviz"/>
   </group>
 </launch>
