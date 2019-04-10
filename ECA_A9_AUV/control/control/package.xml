@@ -12,7 +12,5 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <exec_depend>trajectory_control</exec_depend>
-
 </package>
 
