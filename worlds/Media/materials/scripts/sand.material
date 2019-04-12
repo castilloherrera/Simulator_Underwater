@@ -1,4 +1,4 @@
-material SandAndStones
+material material/SandAndStones
 {
   receive_shadows on
   technique

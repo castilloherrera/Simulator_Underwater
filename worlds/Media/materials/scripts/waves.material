@@ -8,7 +8,7 @@ fragment_program SimpleWavesFS glsl
   source ../programs/SimpleWaves.frag
 }
 
-material UUVSimulator/SimpleWaves
+material SimpleWaves
 {
   technique GLSL
   {
