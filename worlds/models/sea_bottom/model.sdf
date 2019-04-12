@@ -1,4 +1,11 @@
 <?xml version="1.0" ?>
+<!--***************************************************    
+ * Title: UUV Simulator   
+ * Author: The UUV Simulator Authors  
+ * Date: 2016      
+ * Availability: https://uuvsimulator.github.io/
+***************************************************
+-->
 <sdf version="1.5">
   <model name="sea_bottom">
     <static>true</static>
@@ -23,7 +30,7 @@
         <material>
           <script>
             <uri>file://Media/materials/scripts/sand.material</uri>
-            <name>UUVSimulator/SandAndStones</name>
+            <name>SandAndStones</name>
           </script>
           <emissive>
             0.2 0.2 0.2 1.0

@@ -1,4 +1,4 @@
-material UUVSimulator/SeaWall
+material SeaWall
 {
   receive_shadows off
   technique
@@ -16,7 +16,7 @@ material UUVSimulator/SeaWall
 }
 
 
-material UUVSimulator/StaticWater
+material StaticWater
 {
   technique
   {
@@ -38,7 +38,7 @@ material UUVSimulator/StaticWater
   }
 }
 
-material UUVSimulator/StaticDeepWater
+material StaticDeepWater
 {
   technique
   {
@@ -60,7 +60,7 @@ material UUVSimulator/StaticDeepWater
   }
 }
 
-material UUVSimulator/StaticTurquoiseWater
+material StaticTurquoiseWater
 {
   technique
   {
@@ -82,7 +82,7 @@ material UUVSimulator/StaticTurquoiseWater
   }
 }
 
-material UUVSimulator/StaticWaves
+material StaticWaves
 {
   technique
   {

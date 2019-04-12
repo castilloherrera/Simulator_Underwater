@@ -1,27 +1,9 @@
-// Copyright (c) 2016 The UUV Simulator Authors.
-// All rights reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-// This source code is derived from hector_localization
-//   (https://github.com/tu-darmstadt-ros-pkg/hector_localization)
-// Copyright (c) 2012, Johannes Meyer, TU Darmstadt,
-// licensed under the BSD 3-Clause license,
-// cf. 3rd-party-licenses.txt file in the root directory of this source tree.
-//
-// The original code was modified to:
-// - be more consistent with other sensor plugins within uuv_simulator,
-// - adhere to Gazebo's coding standards.
+/***************************************************
+ * Title: UUV Simulator
+ * Author: The UUV Simulator Authors
+ * Date: 2016
+ * Availability: https://uuvsimulator.github.io/
+***************************************************/
 
 #include <ros/ros.h>
 #include <nav_msgs/Odometry.h>

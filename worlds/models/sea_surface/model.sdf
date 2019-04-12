@@ -1,4 +1,11 @@
 <?xml version="1.0" ?>
+<!--***************************************************    
+ * Title: UUV Simulator   
+ * Author: The UUV Simulator Authors  
+ * Date: 2016      
+ * Availability: https://uuvsimulator.github.io/
+***************************************************
+-->
 <sdf version="1.5">
   <model name="sea_surface">
     <static>true</static>
@@ -15,7 +22,7 @@
         <material>
           <script>
             <uri>file://Media/materials/scripts/waves.material</uri>
-            <name>UUVSimulator/SimpleWaves</name>
+            <name>SimpleWaves</name>
           </script>
         </material>
       </visual>
@@ -32,7 +39,7 @@
         <material>
           <script>
             <uri>file://Media/materials/scripts/water.material</uri>
-            <name>UUVSimulator/StaticWater</name>
+            <name>StaticWater</name>
           </script>
         </material>
       </visual>

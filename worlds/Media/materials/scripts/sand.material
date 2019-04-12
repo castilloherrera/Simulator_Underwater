@@ -1,4 +1,4 @@
-material UUVSimulator/SandAndStones
+material SandAndStones
 {
   receive_shadows on
   technique
