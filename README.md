@@ -1,9 +1,11 @@
 # Simulator_Underwater
 
-#Installation 
+# Installation 
 
 --> Copy the files in your Workspace 
+
 cd ~/name_of_workspace
+
 git clone https://github.com/castilloherrera/Simulator_Underwater.git
 
 --> Then build your workspace using
