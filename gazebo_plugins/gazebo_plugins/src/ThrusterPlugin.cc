@@ -26,6 +26,9 @@
 #include <gazebo/physics/PhysicsEngine.hh>
 #include <gazebo/physics/World.hh>
 #include <gazebo/transport/TransportTypes.hh>
+#include <gazebo/transport/transport.hh>
+#include <gazebo/gazebo_core.hh>
+#include <gazebo/gazebo.hh>
 #include <sdf/sdf.hh>
 
 #include <math.h>
