@@ -9,7 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   geometry_msgs
   std_msgs
-  uuv_gazebo_ros_plugins_msgs
+  gazebo_ros_plugins_msgs
   roscpp
   visualization_msgs
   tf2_ros
