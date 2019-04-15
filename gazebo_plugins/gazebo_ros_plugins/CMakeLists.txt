@@ -5,7 +5,7 @@ project(gazebo_ros_plugins)
 add_definitions(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
-  uuv_gazebo_plugins
+  gazebo_plugins
   sensor_msgs
   geometry_msgs
   std_msgs
@@ -32,7 +32,7 @@ catkin_package(
   sensor_msgs
   geometry_msgs
   std_msgs
-  uuv_gazebo_ros_plugins_msgs
+  gazebo_ros_plugins_msgs
   visualization_msgs
 )
 
