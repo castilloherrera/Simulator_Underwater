@@ -32,7 +32,7 @@
 namespace gazebo {
 
 /// \brief Definition of a pointer to the floating point message
-typedef const boost::shared_ptr<const uuv_gazebo_plugins_msgs::msgs::Double>
+typedef const boost::shared_ptr<const gazebo_plugins_msgs::msgs::Double>
 ConstDoublePtr;
 
 class FinPlugin : public ModelPlugin

@@ -114,7 +114,7 @@ void FinPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 
   // Advertise the output topic
   this->anglePublisher = this->node->Advertise<
-      uuv_gazebo_plugins_msgs::msgs::Double>(outputTopic);
+      gazebo_plugins_msgs::msgs::Double>(outputTopic);
 
 
   // Subscribe to the input signal topic
