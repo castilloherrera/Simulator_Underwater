@@ -434,14 +434,14 @@ void HMFossen::ApplyHydrodynamicForces(
   if ( this->debugFlag )
   {
     // Store intermediate results for debugging purposes
-    this->StoreVector(UUV_DAMPING_FORCE, Vec3dToGazebo(damping.head<3>()));
-    this->StoreVector(UUV_DAMPING_TORQUE, Vec3dToGazebo(damping.tail<3>()));
+    this->StoreVector(DAMPING_FORCE, Vec3dToGazebo(damping.head<3>()));
+    this->StoreVector(DAMPING_TORQUE, Vec3dToGazebo(damping.tail<3>()));
 
-    this->StoreVector(UUV_ADDED_MASS_FORCE, Vec3dToGazebo(added.head<3>()));
-    this->StoreVector(UUV_ADDED_MASS_TORQUE, Vec3dToGazebo(added.tail<3>()));
+    this->StoreVector(ADDED_MASS_FORCE, Vec3dToGazebo(added.head<3>()));
+    this->StoreVector(ADDED_MASS_TORQUE, Vec3dToGazebo(added.tail<3>()));
 
-    this->StoreVector(UUV_ADDED_CORIOLIS_FORCE, Vec3dToGazebo(cor.head<3>()));
-    this->StoreVector(UUV_ADDED_CORIOLIS_TORQUE, Vec3dToGazebo(cor.tail<3>()));
+    this->StoreVector(ADDED_CORIOLIS_FORCE, Vec3dToGazebo(cor.head<3>()));
+    this->StoreVector(ADDED_CORIOLIS_TORQUE, Vec3dToGazebo(cor.tail<3>()));
   }
 }
 
