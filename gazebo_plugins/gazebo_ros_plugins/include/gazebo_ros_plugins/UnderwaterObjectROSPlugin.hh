@@ -133,7 +133,7 @@ namespace uuv_simulator_ros
     /// \brief Return the offset factor for the model's volume
     public: bool GetOffsetVolume(
       gazebo_ros_plugins_msgs::GetFloat::Request& _req,
-      uuv_gazebo_ros_plugins_msgs::GetFloat::Response& _res);
+      gazebo_ros_plugins_msgs::GetFloat::Response& _res);
 
     /// \brief Set the offset factor for the added-mass matrix
     public: bool SetOffsetAddedMass(

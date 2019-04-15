@@ -54,7 +54,7 @@ namespace uuv_simulator_ros
 
     /// \brief Set new set point (desired thrust [N]) for thruster.
     public: void SetThrustReference(
-        const uuv_gazebo_ros_plugins_msgs::FloatStamped::ConstPtr &_msg);
+        const gazebo_ros_plugins_msgs::FloatStamped::ConstPtr &_msg);
 
     /// \brief Return the ROS publish period.
     public: gazebo::common::Time  GetRosPublishPeriod();

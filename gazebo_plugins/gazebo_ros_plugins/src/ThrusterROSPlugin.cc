@@ -146,12 +146,12 @@ void ThrusterROSPlugin::Load(gazebo::physics::ModelPtr _parent,
       &ThrusterROSPlugin::GetThrusterConversionFcn, this);
 
   this->subThrustReference = this->rosNode->subscribe<
-    uuv_gazebo_ros_plugins_msgs::FloatStamped
+    gazebo_ros_plugins_msgs::FloatStamped
     >(this->commandSubscriber->GetTopic(), 10,
       boost::bind(&ThrusterROSPlugin::SetThrustReference, this, _1));
 
   this->pubThrust = this->rosNode->advertise<
-    uuv_gazebo_ros_plugins_msgs::FloatStamped
+    gazebo_ros_plugins_msgs::FloatStamped
     >(this->thrustTopicPublisher->GetTopic(), 10);
 
   this->pubThrustWrench =
@@ -346,6 +346,7 @@ bool ThrusterROSPlugin::GetThrusterConversionFcn(
       gzmsg << item.first << " " << item.second << std::endl;
       _res.fcn.lookup_table_input.push_back(item.first);
       _res.fcn.lookup_table_output.push_back(item.second);
+    }
   }
 
   return true;
