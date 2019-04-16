@@ -4,10 +4,12 @@ project(gazebo_plugins)
 add_definitions(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
-    gazebo_dev)
+    gazebo_dev
+    gazebo_ros)
 find_package(Boost REQUIRED COMPONENTS system)
 find_package(Eigen3 REQUIRED)
 find_package(Protobuf REQUIRED)
+find_package(gazebo REQUIRED)
 
 file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/msgs)
 
@@ -34,6 +36,8 @@ message(STATUS "GAZEBO_MSG_INCLUDE_DIRS = " ${GAZEBO_MSG_INCLUDE_DIRS})
 file(GLOB msgs msgs/*.proto)
 
 catkin_package(
+  DEPENDS
+    gazebo_ros
   INCLUDE_DIRS
     include
     ${CMAKE_CURRENT_BINARY_DIR} # for generated messages
@@ -49,11 +53,13 @@ include_directories(${PROJECT_SOURCE_DIR}/include
                     ${CMAKE_CURRENT_BINARY_DIR} # for generated messages
                     ${Boost_INCLUDE_DIR}
                     ${catkin_INCLUDE_DIRS}
+                    ${GAZEBO_INCLUDE_DIRS}
                     ${GAZEBO_MSG_INCLUDE_DIRS}
                     ${EIGEN3_INCLUDE_DIRS})
 
 link_directories(
   ${catkin_LIBRARY_DIRS}
+  ${GAZEBO_LIBRARY_DIRS}
   ${EIGEN3_LIBRARY_DIRS})
 
 ###########
@@ -79,7 +85,8 @@ target_link_libraries(fin_plugin
     dynamics
     gazebo_plugins_msgs
     ${catkin_LIBRARIES}
-    ${Boost_LIBRARIES})
+    ${Boost_LIBRARIES}
+    ${GAZEBO_LIBRARIES})
 add_dependencies(fin_plugin
   gazebo_plugins_msgs
   ${catkin_EXPORTED_TARGETS})
