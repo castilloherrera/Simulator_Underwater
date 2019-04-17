@@ -32,6 +32,7 @@ target_link_libraries(message_to_tf
 
 catkin_install_python(PROGRAMS scripts/set_simulation_timer.py
                                scripts/publish_world_models.py
+                               scripts/spawn_model.py
                       DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 install(DIRECTORY launch urdf
