@@ -11,6 +11,13 @@ find_package(catkin REQUIRED COMPONENTS
 	gazebo_dev
 	gazebo_msgs)
 find_package(Boost REQUIRED)
+find_package(Protobuf REQUIRED)
+#find_package(gazebo_ros REQUIRED)
+
+include (FindPkgConfig)
+if (PKG_CONFIG_FOUND)
+  pkg_check_modules(GAZEBO gazebo)
+endif()
 
 catkin_package(
 	INCLUDE_DIRS include
@@ -21,14 +28,14 @@ catkin_package(
 )
 
 include_directories(
-	include
-  ${catkin_INCLUDE_DIRS}
-	${Boost_INCLUDE_DIRS}
-)
+        include
+        ${catkin_INCLUDE_DIRS}
+        ${GAZEBO_INCLUDE_DIRS}
+	${Boost_INCLUDE_DIRS})
 
 link_directories(
 	${CMAKE_CURRENT_BINARY_DIR}/msgs
-)
+        ${GAZEBO_LIBRARY_DIRS})
 
 ###########
 ## Build ##
@@ -40,6 +47,7 @@ add_library(underwater_current_plugin
 target_link_libraries(underwater_current_plugin
   ${GAZEBO_LIBRARIES}
   ${Boost_LIBRARIES}
+  ${PROTOBUF_LIBRARIES}
   ${catkin_LIBRARIES})
 
 #############

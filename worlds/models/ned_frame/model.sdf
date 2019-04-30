@@ -6,6 +6,7 @@
  * Availability: https://uuvsimulator.github.io/
 ***************************************************
 -->
+
 <sdf version='1.5'>
     <model name="world_ned">
 

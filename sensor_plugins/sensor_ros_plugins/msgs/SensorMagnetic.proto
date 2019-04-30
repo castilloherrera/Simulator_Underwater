@@ -1,0 +1,16 @@
+//***************************************************    
+// * Title: UUV Simulator   
+// * Author: The UUV Simulator Authors  
+// * Date: 2016      
+// * Availability: https://uuvsimulator.github.io/
+//***************************************************
+
+syntax = "proto2";
+package sensor_msgs.msgs;
+import "vector3d.proto";
+
+message Magnetic
+{
+  required gazebo.msgs.Vector3d magnetic_field = 1;
+  repeated float   magnetic_field_covariance = 2 [packed=true];
+}

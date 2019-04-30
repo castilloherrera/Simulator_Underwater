@@ -29,13 +29,14 @@ target_link_libraries(message_to_tf
   ${catkin_LIBRARIES}
 )
 
-
-catkin_install_python(PROGRAMS scripts/set_simulation_timer.py
+catkin_install_python(PROGRAMS scripts/publish_footprints.py
+                               scripts/set_simulation_timer.py
                                scripts/publish_world_models.py
-                               scripts/spawn_model
+                               scripts/publish_vehicle_footprint.py
+                               scripts/unpause_simulation.py
                       DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
-install(DIRECTORY launch urdf
+install(DIRECTORY launch
         DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
         PATTERN "*~" EXCLUDE)
 
