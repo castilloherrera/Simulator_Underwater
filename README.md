@@ -6,19 +6,19 @@
 
 cd ~/name_of_workspace
 
-git clone https://github.com/castilloherrera/Simulator_Underwater.git
+    git clone https://github.com/castilloherrera/Simulator_Underwater.git
 
 --> Then build your workspace using
 
-cd ~/catkin_ws
+    cd ~/catkin_ws
 
-catkin_make install
+    catkin_make install
 
 or
 
-cd ~/catkin_ws
+    cd ~/catkin_ws
 
-catkin build
+    catkin build
 
 (in case you are using catkin_tools.)
 
@@ -27,4 +27,4 @@ catkin build
 
 Start an empty underwater environment using either
 
-roslaunch worlds ocean_waves.launch
+    roslaunch worlds ocean_waves.launch
