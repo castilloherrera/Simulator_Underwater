@@ -14,6 +14,10 @@
 
   <exec_depend>tools</exec_depend>
   <exec_depend>description</exec_depend>
+  <exec_depend>control_msgs</exec_depend>
+  <exec_depend>utils</exec_depend>
+  <exec_depend>thruster_manager</exec_depend>
+  <exec_depend>trajectory_control</exec_depend>
   <exec_depend>gazebo_plugins_sim</exec_depend>
   <exec_depend>gazebo_ros_plugins</exec_depend>
   <exec_depend>gazebo_ros_plugins_msgs</exec_depend>
@@ -23,7 +27,6 @@
   <exec_depend>world_plugins</exec_depend>
   <exec_depend>world_ros_plugins</exec_depend>
   <exec_depend>world_ros_plugins_msgs</exec_depend>
-
 
   <export>
     <metapackage/>

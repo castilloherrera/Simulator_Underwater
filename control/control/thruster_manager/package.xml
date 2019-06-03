@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>thruster_manager</name>
+  <version>0.1.1</version>
+  <description>The thruster manager package</description>
+
+  <maintainer email="alamcastillo@outlook.com">CASTILLO HERRERA Alam</maintainer>
+  
+  <author email="alamcastillo@outlook.com">CASTILLO HERRERA Alam</author>
+
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>message_generation</build_depend>
+
+  <depend>std_msgs</depend>
+  
+  <exec_depend>message_runtime</exec_depend>
+  <exec_depend>tf</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>python-yaml</exec_depend>
+  <exec_depend>gazebo_ros_plugins_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+
+</package>
