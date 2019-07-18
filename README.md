@@ -2,6 +2,9 @@
 
 # Installation 
 
+**WARING !!! : It may be neccessary to install the library libprotobuf-c-dev, make sure you have it installed before installing the simulator** 
+
+
 Copy the files in your Workspace 
 
 cd ~/name_of_workspace
