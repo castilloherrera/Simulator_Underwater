@@ -20,14 +20,14 @@ from tf.transformations import quaternion_about_axis, quaternion_multiply, \
     quaternion_inverse, quaternion_matrix, euler_from_quaternion
 
 
-class DPControllerLocalPlannerRect(object):
+class DPControllerLocalPlannerECA(object):
     """
     Local planner for the dynamic positioning controllers to interpolate
     trajectories and generate trajectories from interpolated waypoint paths.
     """
 
     def __init__(self, full_dof=False, stamped_pose_only=False, thrusters_only=True):
-        self._logger = logging.getLogger('dp_local_planner_rect')
+        self._logger = logging.getLogger('dp_local_planner')
         out_hdlr = logging.StreamHandler(sys.stdout)
         out_hdlr.setFormatter(logging.Formatter(
             rospy.get_namespace().replace('/', '').upper() + ' -- %(asctime)s | %(levelname)s | %(module)s | %(message)s'))
@@ -43,10 +43,13 @@ class DPControllerLocalPlannerRect(object):
         # Max. allowed forward speed
         self._max_forward_speed = rospy.get_param('~max_forward_speed', 1.0)
 
-        self._idle_rect_origin = None
+        self._idle_circle_center = None
         self._idle_z = None
 
         self._logger.info('Max. forward speed [m/s]=%.2f' % self._max_forward_speed)
+
+        self._idle_radius = rospy.get_param('~idle_radius', 10.0)
+        assert self._idle_radius > 0
 
         # Is underactuated?
         self._is_underactuated = rospy.get_param('~is_underactuated', False)
@@ -102,6 +105,15 @@ class DPControllerLocalPlannerRect(object):
             else:
                 self._logger.info('No parameters for interpolation method <%s> found' % method)
 
+        # dt used to compute the pose reference from the joystick input
+        self._dt = 0.0
+        # Time stamp for the last velocity reference received
+        self._last_teleop_update = None
+        # Flag to indicate if the teleoperation node is active
+        self._is_teleop_active = False
+        # Teleop node twist message
+        self._teleop_vel_ref = None
+
         self.init_odom_event = Event()
         self.init_odom_event.clear()
 
@@ -142,6 +154,7 @@ class DPControllerLocalPlannerRect(object):
                                                       MarkerArray,
                                                       queue_size=1)
 
+        self._teleop_sub = rospy.Subscriber('cmd_vel', Twist, self._update_teleop)
 
         self._waypoints_msg = None
         self._trajectory_msg = None
@@ -257,6 +270,84 @@ class DPControllerLocalPlannerRect(object):
         else:
             self._trajectory_msg = None
             self._logger.error('Error generating trajectory message')
+
+    def _update_teleop(self, msg):
+        """
+        Callback to the twist teleop subscriber.
+        """
+        # Test whether the vehicle is in automatic mode (following a given
+        # trajectory)
+        if self._is_automatic:
+            self._teleop_vel_ref = None
+            return
+
+        # If this is the first twist message since the last time automatic mode
+        # was turned off, then just update the teleop timestamp and wait for
+        # the next message to allow computing pose and velocity reference.
+        if self._last_teleop_update is None:
+            self._teleop_vel_ref = None
+            self._last_teleop_update = rospy.get_time()
+            return
+
+        # Store twist reference message
+        self._teleop_vel_ref = msg
+
+        # Set the teleop mode is active only if any of the linear velocity components and
+        # yaw rate are non-zero
+        vel = np.array([self._teleop_vel_ref.linear.x, self._teleop_vel_ref.linear.y, self._teleop_vel_ref.linear.z, self._teleop_vel_ref.angular.z])
+        self._is_teleop_active = np.abs(vel).sum() > 0
+
+        # Store time stamp
+        self._last_teleop_update = rospy.get_time()
+
+    def _calc_teleop_reference(self):
+        """
+        Compute pose and velocity reference using the joystick linear and
+        angular velocity input.
+        """
+        # Check if there is already a timestamp for the last received reference
+        # message from the teleop node
+        if self._last_teleop_update is None:
+            self._is_teleop_active = False
+
+        # Compute time step
+        self._dt = rospy.get_time() - self._last_teleop_update
+
+        # Compute the pose and velocity reference if the computed time step is
+        # positive and the twist teleop message is valid
+        if self._dt > 0 and self._teleop_vel_ref is not None and self._dt < 0.1:
+            speed = np.sqrt(self._teleop_vel_ref.linear.x**2 + self._teleop_vel_ref.linear.y**2)
+            vel = np.array([self._teleop_vel_ref.linear.x, self._teleop_vel_ref.linear.y, self._teleop_vel_ref.linear.z])
+            # Cap the forward speed if needed
+            if speed > self._max_forward_speed:
+                vel[0] *= self._max_forward_speed / speed
+                vel[1] *= self._max_forward_speed / speed
+
+            vel = np.dot(self._vehicle_pose.rot_matrix, vel)
+
+            # Compute pose step
+            step = trajectory_generator.TrajectoryPoint()
+            step.pos = np.dot(self._vehicle_pose.rot_matrix, vel * self._dt)
+            step.rotq = quaternion_about_axis(self._teleop_vel_ref.angular.z * self._dt, [0, 0, 1])
+
+            # Compute new reference
+            ref_pnt = trajectory_generator.TrajectoryPoint()
+            ref_pnt.pos = self._vehicle_pose.pos + step.pos
+
+            ref_pnt.rotq = quaternion_multiply(self.get_vehicle_rot(), step.rotq)
+
+            # Cap the pose reference in Z to stay underwater
+            if ref_pnt.z > 0:
+                ref_pnt.z = 0.0
+                ref_pnt.vel = [vel[0], vel[1], 0, 0, 0, self._teleop_vel_ref.angular.z]
+            else:
+                ref_pnt.vel = [vel[0], vel[1], vel[2], 0, 0, self._teleop_vel_ref.angular.z]
+
+            ref_pnt.acc = np.zeros(6)
+        else:
+            self._is_teleop_active = False
+            ref_pnt = deepcopy(self._vehicle_pose)
+        return ref_pnt
 
     def _calc_smooth_approach(self):
         """
@@ -415,7 +506,7 @@ class DPControllerLocalPlannerRect(object):
             self.set_station_keeping(False)
             self.set_automatic_mode(True)
             self.set_trajectory_running(True)
-            self._idle_rect_origin = None
+            self._idle_circle_center = None
             self._smooth_approach_on = True
             self._logger.info('============================')
             self._logger.info('      WAYPOINT SET          ')
@@ -461,7 +552,7 @@ class DPControllerLocalPlannerRect(object):
             self.set_station_keeping(False)
             self.set_automatic_mode(True)
             self.set_trajectory_running(True)
-            self._idle_rect_origin = None
+            self._idle_circle_center = None
             self._smooth_approach_on = True
 
             self._logger.info('============================')
@@ -516,7 +607,7 @@ class DPControllerLocalPlannerRect(object):
         self.set_station_keeping(False)
         self.set_automatic_mode(True)
         self.set_trajectory_running(True)
-        self._idle_rect_origin = None
+        self._idle_circle_center = None
         self._smooth_approach_on = False
 
         self._logger.info('============================')
@@ -576,7 +667,7 @@ class DPControllerLocalPlannerRect(object):
         self.set_station_keeping(False)
         self.set_automatic_mode(True)
         self.set_trajectory_running(True)
-        self._idle_rect_origin = None
+        self._idle_circle_center = None
         self._smooth_approach_on = False
 
         self._logger.info('============================')
@@ -610,7 +701,7 @@ class DPControllerLocalPlannerRect(object):
                 self._calc_smooth_approach()
                 self._smooth_approach_on = False
                 self._update_trajectory_info()
-                time.sleep(0.0)
+                time.sleep(0.5)
                 self._logger.info('Adding waypoints to approach the given waypoint trajectory')
 
             # Get interpolated reference from the reference trajectory
@@ -626,8 +717,14 @@ class DPControllerLocalPlannerRect(object):
                 self._logger.info(rospy.get_namespace() + ' - Trajectory running')
 
             if self._traj_running and (self._traj_interpolator.has_finished() or self._station_keeping_on):
-                # Trajectory ended,
+                # Trajectory ended, start station keeping mode
                 self._logger.info(rospy.get_namespace() + ' - Trajectory completed!')
+                if self._this_ref_pnt is None:
+                    # TODO Fix None value coming from the odometry
+                    if self._is_teleop_active:
+                        self._this_ref_pnt = self._calc_teleop_reference()
+                    else:
+                        self._this_ref_pnt = deepcopy(self._vehicle_pose)
 
                 self._this_ref_pnt.vel = np.zeros(6)
                 self._this_ref_pnt.acc = np.zeros(6)
@@ -639,15 +736,20 @@ class DPControllerLocalPlannerRect(object):
         elif self._this_ref_pnt is None:
             self._traj_interpolator.set_interp_method('lipb')
             # Use the latest position and heading of the vehicle from the odometry to enter station keeping mode
-            self._this_ref_pnt = deepcopy(self._vehicle_pose)
+            if self._is_teleop_active:
+                self._this_ref_pnt = self._calc_teleop_reference()
+            else:
+                self._this_ref_pnt = deepcopy(self._vehicle_pose)
             # Set roll and pitch reference to zero
             yaw = self._this_ref_pnt.rot[2]
             self._this_ref_pnt.rot = [0, 0, yaw]
             self.set_automatic_mode(False)
         elif self._station_keeping_on:
+            if self._is_teleop_active:
+                self._this_ref_pnt = self._calc_teleop_reference()
             self._max_time_pub.publish(Float64(0))
             #######################################################################
-            if not self._thrusters_only and rospy.get_time() - self._start_count_idle > self._timeout_idle_mode:
+            if not self._thrusters_only and not self._is_teleop_active and rospy.get_time() - self._start_count_idle > self._timeout_idle_mode:
                 self._logger.info('AUV STATION KEEPING')
                 if self._station_keeping_center is None:
                     self._station_keeping_center = self._this_ref_pnt
@@ -667,7 +769,7 @@ class DPControllerLocalPlannerRect(object):
                 self.set_station_keeping(False)
                 self.set_automatic_mode(True)
                 self.set_trajectory_running(True)
-                self._smooth_approach_on = True
-            #######################################################################"""
+                self._smooth_approach_on = False
+            #######################################################################
         self._lock.release()
         return self._this_ref_pnt

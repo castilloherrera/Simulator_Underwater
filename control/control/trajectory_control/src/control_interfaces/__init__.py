@@ -11,6 +11,7 @@ from .dp_controller_base import DPControllerBase
 from .dp_pid_controller_base import DPPIDControllerBase
 from .dp_controller_local_planner import DPControllerLocalPlanner
 from .dp_controller_local_planner_rect import DPControllerLocalPlannerRect
+from .dp_controller_local_planner_eca import DPControllerLocalPlannerECA
 
 try:
     import casadi

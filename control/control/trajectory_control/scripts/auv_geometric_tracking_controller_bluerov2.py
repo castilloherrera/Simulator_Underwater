@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 import math
-import yaml
 import numpy as np
 import rospy
-import rospkg
 from copy import deepcopy
 
 import geometry_msgs.msg as geometry_msgs
@@ -12,7 +10,6 @@ import tf
 import tf.transformations as trans
 
 from nav_msgs.msg import Odometry
-from thrusters import ThrusterFile
 from thrusters.models import Thruster
 from gazebo_ros_plugins_msgs.msg import FloatStamped
 from control_msgs.msg import TrajectoryPoint
@@ -28,66 +25,19 @@ class AUVGeometricTrackingController:
         self.local_planner = DPControllerLocalPlanner(full_dof=True, thrusters_only=False,
             stamped_pose_only=False)
 
-# Read parameters from Yaml file
+        self.base_link = rospy.get_param('~base_link', 'base_link')
 
-        rospack = rospkg.RosPack()
-        path_loc = rospack.get_path("bluerov2_control") + "/config/thruster_manager.yaml"
-        with open(path_loc,'r') as doc:
-            parameters_thrus = yaml.load(doc)
-
-        self.base_link = parameters_thrus["thruster_manager"]["base_link"]
-        rospy.set_param("base_link", self.base_link)
-
-        self.min_thrust = parameters_thrus["thruster_manager"]["min_thrust"]
-        rospy.set_param("min_thrust", self.min_thrust)
+        # Reading the minimum thrust generated
+        self.min_thrust = rospy.get_param('~min_thrust', 0)
         assert self.min_thrust >= 0
         rospy.loginfo('Min. thrust [N]=%.2f', self.min_thrust)
 
-        self.max_thrust = parameters_thrus["thruster_manager"]["max_thrust"]
-        rospy.set_param("max_thrust", self.max_thrust)
+        # Reading the maximum thrust generated
+        self.max_thrust = rospy.get_param('~max_thrust', 0)
         assert self.max_thrust > 0 and self.max_thrust > self.min_thrust
         rospy.loginfo('Max. thrust [N]=%.2f', self.max_thrust)
 
-        self.thruster_topic_0 = parameters_thrus["thruster_manager"]["thruster_topic_0"]
-        rospy.set_param("thruster_topic_0", self.thruster_topic_0)
-        assert len(self.thruster_topic_0) > 0
-
-        self.thruster_topic_1 = parameters_thrus["thruster_manager"]["thruster_topic_1"]
-        rospy.set_param("thruster_topic_1", self.thruster_topic_1)
-        assert len(self.thruster_topic_1) > 0
-
-        self.thruster_topic_2 = parameters_thrus["thruster_manager"]["thruster_topic_2"]
-        rospy.set_param("thruster_topic_2", self.thruster_topic_2)
-        assert len(self.thruster_topic_2) > 0
-
-        self.thruster_topic_3 = parameters_thrus["thruster_manager"]["thruster_topic_3"]
-        rospy.set_param("thruster_topic_3", self.thruster_topic_3)
-        assert len(self.thruster_topic_3) > 0
-
-        self.thruster_topic_4 = parameters_thrus["thruster_manager"]["thruster_topic_4"]
-        rospy.set_param("thruster_topic_4", self.thruster_topic_4)
-        assert len(self.thruster_topic_4) > 0
-
-        self.thruster_topic_5 = parameters_thrus["thruster_manager"]["thruster_topic_5"]
-        rospy.set_param("thruster_topic_5", self.thruster_topic_5)
-        assert len(self.thruster_topic_5) > 0
-
-        self.thruster_config = parameters_thrus["thruster_manager"]["base_link"]
-        rospy.set_param("base_link", self.thruster_config)
-
-        #self.base_link = rospy.get_param('~base_link', 'base_link')
-
-        """# Reading the minimum thrust generated
-        self.min_thrust = rospy.get_param('~min_thrust', 0)
-        assert self.min_thrust >= 0
-        rospy.loginfo('Min. thrust [N]=%.2f', self.min_thrust)"""
-
-        """# Reading the maximum thrust generated
-        self.max_thrust = rospy.get_param('~max_thrust', 0)
-        assert self.max_thrust > 0 and self.max_thrust > self.min_thrust
-        rospy.loginfo('Max. thrust [N]=%.2f', self.max_thrust)"""
-
-        """# Reading the thruster topic
+        # Reading the thruster topic
         self.thruster_topic_0 = rospy.get_param('~thruster_topic_0', 'thrusters/0/input')
         assert len(self.thruster_topic_0) > 0
 
@@ -109,7 +59,7 @@ class AUVGeometricTrackingController:
 
         # Reading the thruster topic
         self.thruster_topic_5 = rospy.get_param('~thruster_topic_5', 'thrusters/5/input')
-        assert len(self.thruster_topic_5) > 0"""
+        assert len(self.thruster_topic_5) > 0
 
         # Reading the thruster gain
         self.p_gain_thrust = rospy.get_param('~thrust_p_gain', 0.0)
@@ -196,8 +146,8 @@ class AUVGeometricTrackingController:
 # Truster 1 --------------------------------------------------------------------------------------------------------
         # Setting up the thruster topic name
         self.thruster_topic_1 = '/%s/%s/%d/%s' %  (self.namespace,
-        self.thruster_config['topic_prefix'], 1,
-        self.thruster_config['topic_suffix'])
+            self.thruster_config['topic_prefix'], 1,
+            self.thruster_config['topic_suffix'])
 
         base_1 = '%s/%s' % (self.namespace, self.base_link)
 
@@ -231,8 +181,8 @@ class AUVGeometricTrackingController:
 # Truster 2 --------------------------------------------------------------------------------------------------------
         # Setting up the thruster topic name
         self.thruster_topic_2 = '/%s/%s/%d/%s' %  (self.namespace,
-        self.thruster_config['topic_prefix'], 2,
-        self.thruster_config['topic_suffix'])
+            self.thruster_config['topic_prefix'], 2,
+            self.thruster_config['topic_suffix'])
 
         base_2 = '%s/%s' % (self.namespace, self.base_link)
 
@@ -266,8 +216,8 @@ class AUVGeometricTrackingController:
 # Truster 3 --------------------------------------------------------------------------------------------------------
         # Setting up the thruster topic name
         self.thruster_topic_3 = '/%s/%s/%d/%s' %  (self.namespace,
-        self.thruster_config['topic_prefix'], 3,
-        self.thruster_config['topic_suffix'])
+            self.thruster_config['topic_prefix'], 3,
+            self.thruster_config['topic_suffix'])
 
         base_3 = '%s/%s' % (self.namespace, self.base_link)
 
@@ -301,8 +251,8 @@ class AUVGeometricTrackingController:
 # Truster 4 --------------------------------------------------------------------------------------------------------
         # Setting up the thruster topic name
         self.thruster_topic_4 = '/%s/%s/%d/%s' %  (self.namespace,
-        self.thruster_config['topic_prefix'], 4,
-        self.thruster_config['topic_suffix'])
+            self.thruster_config['topic_prefix'], 4,
+            self.thruster_config['topic_suffix'])
 
         base_4 = '%s/%s' % (self.namespace, self.base_link)
 
@@ -336,8 +286,8 @@ class AUVGeometricTrackingController:
 # Truster 5 --------------------------------------------------------------------------------------------------------
         # Setting up the thruster topic name
         self.thruster_topic_5 = '/%s/%s/%d/%s' %  (self.namespace,
-        self.thruster_config['topic_prefix'], 5,
-        self.thruster_config['topic_suffix'])
+            self.thruster_config['topic_prefix'], 5,
+            self.thruster_config['topic_suffix'])
 
         base_5 = '%s/%s' % (self.namespace, self.base_link)
 
