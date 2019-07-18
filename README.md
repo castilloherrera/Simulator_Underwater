@@ -1,6 +1,9 @@
-# Simulator_Underwater
+# Simulator Underwater
 
 # Installation 
+
+**WARING !!! : It may be neccessary to install the library libprotobuf-c-dev, make sure you have it installed before installing the simulator** 
+
 
 Copy the files in your Workspace 
 
@@ -8,7 +11,7 @@ cd ~/name_of_workspace
 
     git clone https://github.com/castilloherrera/Simulator_Underwater.git
 
-Then build your workspace using
+Then, build your workspace using
 
     cd ~/catkin_ws
 
