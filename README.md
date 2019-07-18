@@ -11,7 +11,7 @@ cd ~/name_of_workspace
 
     git clone https://github.com/castilloherrera/Simulator_Underwater.git
 
-Then build your workspace using
+Then, build your workspace using
 
     cd ~/catkin_ws
 
