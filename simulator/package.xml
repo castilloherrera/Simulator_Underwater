@@ -13,6 +13,7 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <exec_depend>tools</exec_depend>
+  <exec_depend>auv_control_allocator</exec_depend>
   <exec_depend>description</exec_depend>
   <exec_depend>control_msgs</exec_depend>
   <exec_depend>utils</exec_depend>

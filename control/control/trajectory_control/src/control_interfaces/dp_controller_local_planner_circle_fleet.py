@@ -27,7 +27,7 @@ from tf.transformations import quaternion_about_axis, quaternion_multiply, \
     quaternion_inverse, quaternion_matrix, euler_from_quaternion
 
 
-class DPControllerLocalPlanner(object):
+class DPControllerLocalPlannerCircleFleet(object):
     """
     Local planner for the dynamic positioning controllers to interpolate
     trajectories and generate trajectories from interpolated waypoint paths.
@@ -862,7 +862,7 @@ class DPControllerLocalPlanner(object):
                 [np.cos(pose.rot[2]), -np.sin(pose.rot[2]), 0],
                 [np.sin(pose.rot[2]), np.cos(pose.rot[2]), 0],
                 [0, 0, 1]])
-            self._idle_circle_center = (pose.pos + 0.8 * self._max_forward_speed * frame[:, 0].flatten()) + radius * frame[:, 1].flatten()
+            self._idle_circle_center = (0.8 * self._max_forward_speed * frame[:, 0].flatten()) + radius * frame[:, 1].flatten()
             self._idle_z = pose.pos[2]
 
         phi = lambda u: 2 * np.pi * u + pose.rot[2] - np.pi / 2
@@ -877,8 +877,8 @@ class DPControllerLocalPlanner(object):
 
         for i in np.linspace(u_init, u_init + 1, n_points):
             wp = waypoints.Waypoint(
-                x=0 + radius * np.cos(phi(i)),
-                y=0 + radius * np.sin(phi(i)),
+                x=self._idle_circle_center[0] + radius * np.cos(phi(i)),
+                y=self._idle_circle_center[1] + radius * np.sin(phi(i)),
                 z=self._idle_z,
                 max_forward_speed=0.8 * self._max_forward_speed,
                 inertial_frame_id=self.inertial_frame_id)

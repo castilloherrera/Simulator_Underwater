@@ -13,7 +13,7 @@ from nav_msgs.msg import Odometry
 from thrusters.models import Thruster
 from gazebo_ros_plugins_msgs.msg import FloatStamped
 from control_msgs.msg import TrajectoryPoint
-from control_interfaces import DPControllerLocalPlannerRect
+from control_interfaces import DPControllerLocalPlanner
 import tf2_ros
 from tf.transformations import quaternion_matrix
 

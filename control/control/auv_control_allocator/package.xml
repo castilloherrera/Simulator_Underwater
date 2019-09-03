@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>auv_control_allocator</name>
+  <version>0.1.1</version>
+  <description>Optimal allocation of forces and torques to thruster and fins of AUVs</description>
+
+  <maintainer email="alamcastillo@outlook.com">CASTILLO HERRERA Alam</maintainer>
+  
+  <author email="alamcastillo@outlook.com">CASTILLO HERRERA Alam</author>
+
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>geometry_msgs</depend>
+  <depend>std_msgs</depend>
+
+  <build_depend>message_generation</build_depend>
+
+  <exec_depend>message_runtime</exec_depend>
+</package>
