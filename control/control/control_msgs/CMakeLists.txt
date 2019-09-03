@@ -27,6 +27,8 @@ add_message_files(
    IsRunningTrajectory.srv
    InitWaypointSet.srv
    InitRectTrajectory.srv
+   InitCircularTrajectory.srv
+   InitHelicalTrajectory.srv
    StartTrajectory.srv
  )
 
