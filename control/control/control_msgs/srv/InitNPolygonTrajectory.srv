@@ -7,8 +7,8 @@
 
 std_msgs/Time start_time
 bool start_now
-float64 height
-float64 width
+float64 n
+float64 radius
 geometry_msgs/Point center
 bool is_clockwise
 float64 angle_offset
@@ -16,5 +16,7 @@ int32 n_points
 float64 heading_offset
 float64 max_forward_speed
 float64 duration
+float64 n_turns
+float64 delta_z
 ---
 bool success

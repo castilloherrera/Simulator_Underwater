@@ -366,10 +366,47 @@ class WaypointSet(object):
         step_theta = np.pi / 2
         for i in range(num_points):
             angle = i * step_theta + theta_offset
-            x = np.cos(angle) * height + origin.x
-            y = np.sin(angle) * width + origin.y
+            x = 0.5 * np.sign(np.cos(angle)) * width + origin.x
+            y = 0.5 * np.sign(np.sin(angle)) * height + origin.y
             z = origin.z
             wp = Waypoint(x, y, z, max_forward_speed,
                           heading_offset)
             self.add_waypoint(wp)
         return True
+
+    def generate_regular_n_poligon(self, n, radius, origin, num_points, max_forward_speed,
+                        theta_offset=0.0, heading_offset=0.0, append=False):
+        if n <= 4:
+            print 'Invalid number of sides, value=', n
+            return False
+
+        if radius <= 0:
+            print 'Invalid radius, value=', radius
+            return False
+
+        if num_points <= 0:
+            print 'Invalid number of samples, value=', num_points
+            return False
+
+        if max_forward_speed <= 0:
+            print 'Invalid absolute maximum velocity, value=', max_forward_speed
+            return False
+
+        if not append:
+            # Clear current list
+            self.clear_waypoints()
+
+        step_theta = np.pi / 2
+        for i in range(num_points):
+            A = 2 * np.pi / n
+            B = np.cos(A / 2)
+            C = np.cos(A *((phi(i) / A) - np.floor(phi(i) / A)) - (A / 2))
+            angle = i * step_theta + theta_offset
+            x = radius * (np.cos(angle) * (B / C)) + origin.x
+            y = radius * (np.sin(angle) * (B / C)) + origin.y
+            z = origin.z
+            wp = Waypoint(x, y, z, max_forward_speed,
+                          heading_offset)
+            self.add_waypoint(wp)
+        return True
+

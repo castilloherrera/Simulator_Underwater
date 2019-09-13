@@ -29,6 +29,7 @@ add_message_files(
    InitRectTrajectory.srv
    InitCircularTrajectory.srv
    InitHelicalTrajectory.srv
+   InitNPolygonTrajectory.srv
    StartTrajectory.srv
  )
 

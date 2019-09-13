@@ -20,7 +20,7 @@ from tf.transformations import quaternion_about_axis, quaternion_multiply, \
     quaternion_inverse, quaternion_matrix, euler_from_quaternion
 
 
-class DPControllerLocalPlannerECA(object):
+class DPControllerPathRect(object):
     """
     Local planner for the dynamic positioning controllers to interpolate
     trajectories and generate trajectories from interpolated waypoint paths.
@@ -43,13 +43,19 @@ class DPControllerLocalPlannerECA(object):
         # Max. allowed forward speed
         self._max_forward_speed = rospy.get_param('~max_forward_speed', 1.0)
 
-        self._idle_circle_center = None
+        self._idle_rectangle_center = None
         self._idle_z = None
 
         self._logger.info('Max. forward speed [m/s]=%.2f' % self._max_forward_speed)
 
-        self._idle_radius = rospy.get_param('~idle_radius', 10.0)
-        assert self._idle_radius > 0
+        self._idle_heigth = rospy.get_param('~idle_heigth', 50.0)
+        assert self._idle_heigth > 0
+
+        self._idle_width = rospy.get_param('~idle_width', 100.0)
+        assert self._idle_width > 0
+
+        self._logger.info('Idle rectangle width [m] = %.2f' % self._idle_width)
+        self._logger.info('Idle rectangle heigth [m] = %.2f' % self._idle_heigth)
 
         # Is underactuated?
         self._is_underactuated = rospy.get_param('~is_underactuated', False)
@@ -154,7 +160,7 @@ class DPControllerLocalPlannerECA(object):
                                                       MarkerArray,
                                                       queue_size=1)
 
-        self._teleop_sub = rospy.Subscriber('cmd_vel', Twist, self._update_teleop)
+        #self._teleop_sub = rospy.Subscriber('cmd_vel', Twist, self._update_teleop)
 
         self._waypoints_msg = None
         self._trajectory_msg = None
@@ -186,7 +192,11 @@ class DPControllerLocalPlannerECA(object):
         self._services['hold_vehicle'] = rospy.Service(
             'hold_vehicle', Hold, self.hold_vehicle)
         self._services['start_waypoint_list'] = rospy.Service(
-            'start_waypoint_list', InitWaypointSet, self.start_waypoint_list)
+            'start_waypoint_list', InitWaypointSet,
+            self.start_waypoint_list)
+        self._services['start_rectangle_trajectory'] = rospy.Service(
+            'start_rectangle_trajectory', InitRectTrajectory,
+            self.start_rectangle)
         self._services['init_waypoints_from_file'] = rospy.Service(
             'init_waypoints_from_file', InitWaypointsFromFile,
             self.init_waypoints_from_file)
@@ -506,7 +516,7 @@ class DPControllerLocalPlannerECA(object):
             self.set_station_keeping(False)
             self.set_automatic_mode(True)
             self.set_trajectory_running(True)
-            self._idle_circle_center = None
+            self._idle_rectangle_center = None
             self._smooth_approach_on = True
             self._logger.info('============================')
             self._logger.info('      WAYPOINT SET          ')
@@ -522,6 +532,78 @@ class DPControllerLocalPlannerECA(object):
             self._logger.error('Error occurred while parsing waypoints')
             self._lock.release()
             return InitWaypointSetResponse(False)
+
+    def start_rectangle(self, request):
+        self._logger.info('SERVICE RECTANGLE TRAJECTORY')
+        if request.max_forward_speed <= 0 or request.heigth <= 0 or request.width <= 0 or \
+           request.n_points <= 0:
+            self._logger.error('Invalid parameters to generate a rectangle trajectory')
+            return InitRectTrajectoryResponse(False)
+        t = rospy.Time(request.start_time.data.secs, request.start_time.data.nsecs)
+        if t.to_sec() < rospy.get_time() and not request.start_now:
+            self._logger.error('The trajectory starts in the past, correct the starting time!')
+            return InitRectTrajectoryResponse(False)
+        try:
+            wp_set = waypoints.WaypointSet(
+                inertial_frame_id=self.inertial_frame_id)
+            success = wp_set.generate_rectangle(heigth=request.heigth,
+                                                width=request.width,
+                                                center=request.center,
+                                                num_points=request.n_points,
+                                                max_forward_speed=request.max_forward_speed,
+                                                theta_offset=request.angle_offset,
+                                                heading_offset=request.heading_offset)
+            if not success:
+                self._logger.error('Error generating rectangle trajectory from waypoint set')
+                return InitRectTrajectoryResponse(False)
+            wp_set = self._apply_workspace_constraints(wp_set)
+            if wp_set.is_empty:
+                self._logger.error('Waypoints violate workspace constraints, are you using world or world_ned as reference?')
+                return InitRectTrajectoryResponse(False)
+
+            self._lock.acquire()
+            # Activates station keeping
+            self.set_station_keeping(True)
+            self._traj_interpolator.set_interp_method('cubic')
+            self._traj_interpolator.set_waypoints(wp_set, self.get_vehicle_rot())
+            self._station_keeping_center = None
+            self._traj_interpolator.set_start_time((t.to_sec() if not request.start_now else rospy.get_time()))
+            if request.duration > 0:
+                if self._traj_interpolator.set_duration(request.duration):
+                    self._logger.info('Setting a maximum duration, duration=%.2f s' % request.duration)
+                else:
+                    self._logger.error('Setting maximum duration failed')
+            self._update_trajectory_info()
+            # Disables station keeping to start trajectory
+            self.set_station_keeping(False)
+            self.set_automatic_mode(True)
+            self.set_trajectory_running(True)
+            self._idle_rectangle_center = None
+            self._smooth_approach_on = True
+
+            self._logger.info('============================')
+            self._logger.info('RECTANGLE TRAJECTORY GENERATED FROM WAYPOINT INTERPOLATION')
+            self._logger.info('============================')
+            self._logger.info('Heigth [m] = %.2f' % request.heigth)
+            self._logger.info('Width [m] = %.2f' % request.width)
+            self._logger.info('Center [m] = (%.2f, %.2f, %.2f)' % (request.center.x, request.center.y, request.center.z))
+            self._logger.info('# of points = %d' % request.n_points)
+            self._logger.info('Max. forward speed = %.2f' % request.max_forward_speed)
+            self._logger.info('Rectangle angle offset = %.2f' % request.angle_offset)
+            self._logger.info('Heading offset = %.2f' % request.heading_offset)
+            self._logger.info('# waypoints = %d' % self._traj_interpolator.get_waypoints().num_waypoints)
+            self._logger.info('Starting from = ' + str(self._traj_interpolator.get_waypoints().get_waypoint(0).pos))
+            self._logger.info('Starting time [s] = %.2f' % (t.to_sec() if not request.start_now else rospy.get_time()))
+            self._logger.info('============================')
+            self._lock.release()
+            return InitRectTrajectoryResponse(True)
+        except Exception, e:
+            self._logger.error('Error while setting rectangle trajectory, msg=' + str(e))
+            self.set_station_keeping(True)
+            self.set_automatic_mode(False)
+            self.set_trajectory_running(False)
+            self._lock.release()
+            return InitRectTrajectoryResponse(False)
 
     def init_waypoints_from_file(self, request):
         if (len(request.filename.data) == 0 or
@@ -552,7 +634,7 @@ class DPControllerLocalPlannerECA(object):
             self.set_station_keeping(False)
             self.set_automatic_mode(True)
             self.set_trajectory_running(True)
-            self._idle_circle_center = None
+            self._idle_rectangle_center = None
             self._smooth_approach_on = True
 
             self._logger.info('============================')
@@ -607,7 +689,7 @@ class DPControllerLocalPlannerECA(object):
         self.set_station_keeping(False)
         self.set_automatic_mode(True)
         self.set_trajectory_running(True)
-        self._idle_circle_center = None
+        self._idle_rectangle_center = None
         self._smooth_approach_on = False
 
         self._logger.info('============================')
@@ -667,7 +749,7 @@ class DPControllerLocalPlannerECA(object):
         self.set_station_keeping(False)
         self.set_automatic_mode(True)
         self.set_trajectory_running(True)
-        self._idle_circle_center = None
+        self._idle_rectangle_center = None
         self._smooth_approach_on = False
 
         self._logger.info('============================')
@@ -686,6 +768,36 @@ class DPControllerLocalPlannerECA(object):
             return self._vehicle_pose
         else:
             return pnt
+
+    def get_idle_rectangle_path(self, n_points, heigth=100, width=50):
+        pose = deepcopy(self._vehicle_pose)
+        if self._idle_rectangle_center is None:
+            frame = np.array([
+                [np.cos(pose.rot[2]), -np.sin(pose.rot[2]), 0],
+                [np.sin(pose.rot[2]), np.cos(pose.rot[2]), 0],
+                [0, 0, 1]])
+            self._idle_rectangle_center = (pose.pos + 12.5 * self._max_forward_speed * frame[:, 0].flatten()) + heigth * frame[:, 1].flatten()
+            self._idle_z = pose.pos[2]
+
+        phi = lambda u: 2 * np.pi * u + pose.rot[2] - np.pi / 2
+        u = lambda angle: (angle - pose.rot[2] + np.pi / 2) / (2 * np.pi)
+
+        vec = pose.pos - self._idle_rectangle_center
+        vec /= np.linalg.norm(vec)
+        u_init = u(np.arctan2(vec[1], vec[0]))
+
+        wp_set = waypoints.WaypointSet(
+            inertial_frame_id=self.inertial_frame_id)
+
+        for i in np.linspace(u_init, u_init + 1, n_points):
+            wp = waypoints.Waypoint(
+                x=self._idle_rectangle_center[0] + 0.5 * width * np.sign(np.cos(phi(i))),
+                y=self._idle_rectangle_center[1] + 0.5 * heigth * np.sign(np.sin(phi(i))),
+                z=self._idle_z,
+                max_forward_speed=0.5 * self._max_forward_speed, #Speed for Reference_Market RVIZ
+                inertial_frame_id=self.inertial_frame_id)
+            wp_set.add_waypoint(wp)
+        return wp_set
 
     def interpolate(self, t):
         """
@@ -725,21 +837,19 @@ class DPControllerLocalPlannerECA(object):
                         self._this_ref_pnt = self._calc_teleop_reference()
                     else:
                         self._this_ref_pnt = deepcopy(self._vehicle_pose)
-
                 self._this_ref_pnt.vel = np.zeros(6)
                 self._this_ref_pnt.acc = np.zeros(6)
                 self._start_count_idle = rospy.get_time()
                 self.set_station_keeping(True)
                 self.set_automatic_mode(False)
                 self.set_trajectory_running(False)
-                self._update_trajectory_info()
         elif self._this_ref_pnt is None:
-            self._traj_interpolator.set_interp_method('lipb')
+            self._traj_interpolator.set_interp_method('linear')
             # Use the latest position and heading of the vehicle from the odometry to enter station keeping mode
             if self._is_teleop_active:
-                self._this_ref_pnt = self._calc_teleop_reference()
+               self._this_ref_pnt = self._calc_teleop_reference()
             else:
-                self._this_ref_pnt = deepcopy(self._vehicle_pose)
+               self._this_ref_pnt = deepcopy(self._vehicle_pose)
             # Set roll and pitch reference to zero
             yaw = self._this_ref_pnt.rot[2]
             self._this_ref_pnt.rot = [0, 0, yaw]
@@ -754,14 +864,14 @@ class DPControllerLocalPlannerECA(object):
                 if self._station_keeping_center is None:
                     self._station_keeping_center = self._this_ref_pnt
 
-                wp_set = self._traj_interpolator.get_waypoints()
+                wp_set = self.get_idle_rectangle_path(5, self._idle_heigth, self._idle_width)
                 wp_set = self._apply_workspace_constraints(wp_set)
                 if wp_set.is_empty:
                     raise rospy.ROSException('Waypoints violate workspace constraints, are you using world or world_ned as reference?')
 
                 # Activates station keeping
                 self.set_station_keeping(True)
-                self._traj_interpolator.set_interp_method('cubic')
+                self._traj_interpolator.set_interp_method('linear')
                 self._traj_interpolator.set_waypoints(wp_set, self.get_vehicle_rot())
                 self._traj_interpolator.set_start_time(rospy.get_time())
                 self._update_trajectory_info()

@@ -9,10 +9,9 @@ catkin_package()
 
 catkin_install_python(PROGRAMS scripts/auv_geometric_tracking_controller_circle.py
 			       scripts/auv_geometric_tracking_controller_rect.py
-                               scripts/auv_geometric_controller_rect.py
-                               scripts/auv_geometric_tracking_controller_bluerov2.py
-                               scripts/auv_geometric_tracking_controller_bluerov2_2.py
-                               scripts/auv_geometric_controller_bluerov2_rect.py
+			       scripts/auv_geometric_tracking_controller_Npolygon.py
+                               scripts/auv_geometric_tracking_controller_rect_file.py
+
                       DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 install(DIRECTORY launch

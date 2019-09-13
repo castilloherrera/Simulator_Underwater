@@ -13,17 +13,17 @@ from nav_msgs.msg import Odometry
 from thrusters.models import Thruster
 from gazebo_ros_plugins_msgs.msg import FloatStamped
 from control_msgs.msg import TrajectoryPoint
-from control_interfaces import DPControllerLocalPlannerRect
+from control_interfaces import DPControllerLocalPlannerRectFile
 import tf2_ros
 from tf.transformations import quaternion_matrix
 
 
-class AUVGeometricControllerRect:
+class AUVGeometricTrackingControllerRectFile:
     def __init__(self):
         self.namespace = rospy.get_namespace().replace('/', '')
         rospy.loginfo('Initialize control for vehicle <%s>' % self.namespace)
 
-        self.local_planner = DPControllerLocalPlannerRect(full_dof=True, thrusters_only=False,
+        self.local_planner = DPControllerLocalPlannerRectFile(full_dof=True, thrusters_only=False,
             stamped_pose_only=False)
 
         self.base_link = rospy.get_param('~base_link', 'base_link')
@@ -288,10 +288,10 @@ class AUVGeometricControllerRect:
 
 if __name__ == '__main__':
     print('Starting AUV trajectory tracker')
-    rospy.init_node('auv_geometric_controller_rect')
+    rospy.init_node('auv_geometric_tracking_controller_rect_File')
 
     try:
-        node = AUVGeometricControllerRect()
+        node = AUVGeometricTrackingControllerRectFile()
         rospy.spin()
     except rospy.ROSInterruptException:
         print('caught exception')
