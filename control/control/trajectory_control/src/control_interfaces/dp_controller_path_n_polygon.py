@@ -61,9 +61,9 @@ class DPControllerPathNPolygon(object):
         self._logger.info('Idle radius [m] = %.2f' % self._idle_radius)
 
         self._idle_n = rospy.get_param('~idle_n', 10.0)
-        assert self._idle_n > 4
+        assert self._idle_n > 2
 
-        self._logger.info('Idle sides = %.2f' % self._idle_n)
+        self._logger.info('Idle n (1) = %.2f' % self._idle_n)
 
         # Is underactuated?
         self._is_underactuated = rospy.get_param('~is_underactuated', False)
@@ -782,11 +782,11 @@ class DPControllerPathNPolygon(object):
                 [np.cos(pose.rot[2]), -np.sin(pose.rot[2]), 0],
                 [np.sin(pose.rot[2]), np.cos(pose.rot[2]), 0],
                 [0, 0, 1]])
-            self._idle_polygon_center = (pose.pos + 0.8 * self._max_forward_speed * frame[:, 0].flatten()) + radius * frame[:, 1].flatten()
+            self._idle_polygon_center = (pose.pos + 4.7473435 * self._max_forward_speed * frame[:, 0].flatten()) + radius * frame[:, 1].flatten()
             self._idle_z = pose.pos[2]
 
-        phi = lambda u: 2 * np.pi * u + pose.rot[2] - np.pi
-        u = lambda angle: (angle - pose.rot[2] + np.pi ) / (2 * np.pi)
+        phi = lambda u: 2 * np.pi * u + pose.rot[2] - np.pi / 2
+        u = lambda angle: (angle - pose.rot[2] + np.pi / 2 ) / (2 * np.pi)
 
         vec = pose.pos - self._idle_polygon_center
         vec /= np.linalg.norm(vec)
@@ -795,17 +795,19 @@ class DPControllerPathNPolygon(object):
         wp_set = waypoints.WaypointSet(
             inertial_frame_id=self.inertial_frame_id)
 
-        for i in np.linspace(u_init, u_init + 1, n_points):
-            A = 2 * np.pi / n
-            B = np.cos(A / 2)
-            C = np.cos(A *((phi(i) / A) - np.floor(phi(i) / A)) - (A / 2))
-            wp = waypoints.Waypoint(
-                x=self._idle_polygon_center[0] + radius * (np.cos(phi(i)) * (B / C)),
-                y=self._idle_polygon_center[1] + radius * (np.sin(phi(i)) * (B / C)),
-                z=self._idle_z,
-                max_forward_speed=0.5 * self._max_forward_speed, #Speed for Reference_Market RVIZ
-                inertial_frame_id=self.inertial_frame_id)
-            wp_set.add_waypoint(wp)
+        A = np.pi / n
+        angle = np.linspace(0, 2 * np.pi, n + 1)
+
+        for i in np.linspace(u_init, u_init + 1, n_points+1):
+            for x in angle:
+                r = np.cos(A) / np.cos((2 / n) * np.arcsin(np.cos((n / 2) * x)))
+                wp = waypoints.Waypoint(
+                    x=self._idle_polygon_center[0] + radius * r * np.cos(phi(i)),
+                    y=self._idle_polygon_center[1] + radius * r * np.sin(phi(i)),
+                    z=self._idle_z,
+                    max_forward_speed=0.5 * self._max_forward_speed, #Speed for Reference_Market RVIZ
+                    inertial_frame_id=self.inertial_frame_id)
+                wp_set.add_waypoint(wp)
         return wp_set
 
     def interpolate(self, t):
@@ -873,7 +875,7 @@ class DPControllerPathNPolygon(object):
                 if self._station_keeping_center is None:
                     self._station_keeping_center = self._this_ref_pnt
 
-                wp_set = self.get_idle_n_polygon_path(20, self._idle_n, self._idle_radius)
+                wp_set = self.get_idle_n_polygon_path(self._idle_n, self._idle_n, self._idle_radius)
                 wp_set = self._apply_workspace_constraints(wp_set)
                 if wp_set.is_empty:
                     raise rospy.ROSException('Waypoints violate workspace constraints, are you using world or world_ned as reference?')

@@ -96,7 +96,7 @@ class WaypointSet(object):
                 else:
                     self._waypoints = [waypoint] + self._waypoints
             else:
-                print 'Cannot add repeated waypoint'
+                #print 'Cannot add repeated waypoint'
                 return False
         else:
             if not add_to_beginning:
