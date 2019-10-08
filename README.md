@@ -8,11 +8,11 @@
 
 **also:**
     
-    **Python-pip:** sudo apt-get install python-pip
+    Python-pip: sudo apt-get install python-pip
     
-    **Python-scipi:** sudo apt-get install python-scipy
+    Python-scipi: sudo apt-get install python-scipy
     
-    **Casadi:** sudo pip install casadi
+    Casadi: sudo pip install casadi
 
 
 Copy the files in your Workspace 
