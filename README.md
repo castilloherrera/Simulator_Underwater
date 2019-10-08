@@ -2,11 +2,11 @@
 
 # Installation 
 
-**WARING !!! : **
+**WARING !!! :**
 
 **It may be neccessary to install the library libprotobuf-c-dev, make sure you have it installed before installing the simulator**
 
-**also: **
+**also:**
     
     Python-pip: Sudo apt-get install python-pip
     
