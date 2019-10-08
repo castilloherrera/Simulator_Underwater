@@ -14,6 +14,7 @@
     
     Casadi: sudo pip install casadi
 
+After that,
 
 Copy the files in your Workspace 
 
@@ -41,3 +42,13 @@ or
 Start an empty underwater environment using either
 
     roslaunch worlds ocean_waves.launch
+    
+    
+**GAZEBO ERROR (Solution)**
+  
+**Error in RESET request for accessing api.ignition.org**
+In terminal:
+  
+    sudo gedit ~/.ignition/fuel/config.yaml
+    
+In url, update the server from https://api.ignitionfuel.org to https://api.ignitionrobotics.org
