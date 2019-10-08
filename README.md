@@ -47,6 +47,7 @@ Start an empty underwater environment using either
 **GAZEBO ERROR (Solution)**
   
 **Error in RESET request for accessing api.ignition.org**
+
 In terminal:
   
     sudo gedit ~/.ignition/fuel/config.yaml
