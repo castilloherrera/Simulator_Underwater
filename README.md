@@ -6,7 +6,7 @@
 
 **It may be neccessary to install the library libprotobuf-c-dev, make sure you have it installed before installing the simulator**
 
-**also:**
+**also**
     
     Python-pip: sudo apt-get install python-pip
     
@@ -48,7 +48,7 @@ Start an empty underwater environment using either
   
 **Error in RESET request for accessing api.ignition.org**
 
-In terminal:
+In terminal
   
     sudo gedit ~/.ignition/fuel/config.yaml
     
