@@ -7,7 +7,8 @@ from catkin_pkg.python_setup import generate_distutils_setup
 setup_args = generate_distutils_setup(
     packages=['control_interfaces',
               'trajectory_generator',
-              'waypoints'],
+              'waypoints',
+              'trajectory_generator.path_generator'],
     package_dir={'': 'src'},
     requires=['std_msgs', 'rospy']
 )
